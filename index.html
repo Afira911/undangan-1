@@ -234,6 +234,97 @@
       </div>
     </section>
 
+    <!-- =============================== -->
+    <!-- GALLERY SECTION (Polaroid)      -->
+    <!-- =============================== -->
+    <section class="section section--gallery">
+      <div class="section-head" data-reveal="fade">
+        <p class="eyebrow eyebrow--dark">Momen</p>
+        <h2 class="section-title">Galeri</h2>
+        <div class="leaf-divider" data-reveal="fade"></div>
+      </div>
+
+      <div class="polaroid-grid">
+        <!-- Ganti <i class="fa-solid fa-image"></i> pada tiap .polaroid-photo dengan <img src="/galeri-1.jpg" alt="..."> -->
+        <figure class="polaroid" style="--rot:-5deg" data-reveal="polaroid">
+          <div class="polaroid-photo"><i class="fa-solid fa-image"></i></div>
+          <figcaption>Sejak awal langkah</figcaption>
+        </figure>
+        <figure class="polaroid" style="--rot:3deg" data-reveal="polaroid">
+          <div class="polaroid-photo"><i class="fa-solid fa-image"></i></div>
+          <figcaption>Perjalanan kami</figcaption>
+        </figure>
+        <figure class="polaroid" style="--rot:-2deg" data-reveal="polaroid">
+          <div class="polaroid-photo"><i class="fa-solid fa-image"></i></div>
+          <figcaption>Menuju satu janji</figcaption>
+        </figure>
+        <figure class="polaroid" style="--rot:5deg" data-reveal="polaroid">
+          <div class="polaroid-photo"><i class="fa-solid fa-image"></i></div>
+          <figcaption>Hingga selamanya</figcaption>
+        </figure>
+      </div>
+    </section>
+
+    <!-- =============================== -->
+    <!-- RSVP SECTION                    -->
+    <!-- =============================== -->
+    <section class="section section--rsvp">
+      <div class="rsvp-wash" aria-hidden="true"></div>
+
+      <div class="section-head" data-reveal="fade">
+        <p class="eyebrow eyebrow--dark">RSVP</p>
+        <h2 class="section-title">Konfirmasi Kehadiran</h2>
+        <div class="leaf-divider" data-reveal="fade"></div>
+        <p class="rsvp-intro" data-reveal="fade" style="transition-delay:.1s">
+          Mohon konfirmasi kehadiran Bapak/Ibu/Saudara/i agar kami dapat mempersiapkan acara dengan sebaik-baiknya.
+        </p>
+      </div>
+
+      <form id="rsvpForm" class="rsvp-form" data-reveal="fade" style="transition-delay:.15s">
+        <div class="form-row">
+          <label for="rsvpNama">Nama</label>
+          <input type="text" id="rsvpNama" name="nama" required placeholder="Nama lengkap Anda">
+        </div>
+
+        <div class="form-row">
+          <label>Konfirmasi Kehadiran</label>
+          <div class="radio-group">
+            <label class="radio-pill">
+              <input type="radio" name="kehadiran" value="Hadir" checked>
+              <span>Hadir</span>
+            </label>
+            <label class="radio-pill">
+              <input type="radio" name="kehadiran" value="Tidak Hadir">
+              <span>Tidak Hadir</span>
+            </label>
+            <label class="radio-pill">
+              <input type="radio" name="kehadiran" value="Ragu-ragu">
+              <span>Ragu-ragu</span>
+            </label>
+          </div>
+        </div>
+
+        <div class="form-row">
+          <label for="rsvpJumlah">Jumlah Tamu</label>
+          <input type="number" id="rsvpJumlah" name="jumlah" min="1" max="10" value="1">
+        </div>
+
+        <div class="form-row">
+          <label for="rsvpPesan">Ucapan &amp; Doa</label>
+          <textarea id="rsvpPesan" name="pesan" rows="3" placeholder="Tuliskan doa terbaik Anda..."></textarea>
+        </div>
+
+        <button type="submit" class="btn btn--solid btn--rsvp" id="rsvpSubmitBtn">
+          <i class="fa-solid fa-paper-plane"></i> <span class="btn-label">Kirim RSVP</span>
+        </button>
+      </form>
+
+      <div id="rsvpSuccess" class="rsvp-success" hidden data-reveal="fade">
+        <i class="fa-solid fa-circle-check"></i>
+        <p>Terima kasih, <strong id="rsvpSuccessName"></strong>! RSVP Anda telah kami terima dengan penuh syukur.</p>
+      </div>
+    </section>
+
   </main>
 
   <!-- =============================== -->

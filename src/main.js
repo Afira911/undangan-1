@@ -210,18 +210,27 @@ if (rsvpForm) {
     rsvpSubmitBtn.classList.add('is-loading');
     rsvpLabel.textContent = 'Mengirim...';
 
-    const formData = new FormData(rsvpForm);
-    formData.set('nama', namaValue);
-    formData.append('tamuUndangan', guestName);
-    formData.append('waktuKirim', new Date().toISOString());
+    // IMPORTANT: Apps Script's e.parameter can unreliably parse multipart
+    // FormData for multi-line <textarea> values (the "pesan" field going
+    // missing). application/x-www-form-urlencoded is parsed consistently,
+    // so we build the payload with URLSearchParams instead of FormData.
+    const payload = new URLSearchParams();
+    payload.append('nama', namaValue);
+    payload.append('kehadiran', new FormData(rsvpForm).get('kehadiran') || '');
+    payload.append('jumlah', document.getElementById('rsvpJumlah').value);
+    payload.append('pesan', document.getElementById('rsvpPesan').value.trim());
+    payload.append('tamuUndangan', guestName);
+    payload.append('waktuKirim', new Date().toISOString());
 
     try {
       // Google Apps Script web apps don't return CORS headers by default,
       // so the response is opaque — a resolved fetch is our success signal.
+      // Passing a URLSearchParams body lets fetch set the correct
+      // application/x-www-form-urlencoded content type automatically.
       await fetch(RSVP_ENDPOINT, {
         method: 'POST',
         mode: 'no-cors',
-        body: formData,
+        body: payload,
       });
 
       rsvpForm.hidden = true;

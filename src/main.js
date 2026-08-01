@@ -190,7 +190,7 @@ if (prefersReducedMotion.matches) {
 // ----------------------------------------------------
 // 9. RSVP — kirim ke Google Apps Script (Google Sheet)
 // ----------------------------------------------------
-const RSVP_ENDPOINT = 'https://script.google.com/macros/s/AKfycbzh1CEryCmISX1fxcixiNxvBQOJ3ee9InK7g1wXRr8Pfz-lElvGIrPaQpZvI9u5gqmvaA/exec';
+const RSVP_ENDPOINT = 'https://script.google.com/macros/s/AKfycbyHHFRjHC8fI2A_nKEB2lcXOxmfEuUXEdMQNMF-qEWqd5QvQfySamslBSf23F8FXTrW_g/exec';
 
 const rsvpForm = document.getElementById('rsvpForm');
 const rsvpSuccess = document.getElementById('rsvpSuccess');

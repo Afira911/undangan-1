@@ -45,7 +45,7 @@ function fadeAudioIn(audioEl, target, durationMs) {
 }
 
 // ----------------------------------------------------
-// 3. SCROLL REVEAL (Intersection Observer) — fade / leaf / bloom / photo / pollen
+// 3. SCROLL REVEAL (Intersection Observer) — fade / leaf / bloom / photo / pollen / polaroid
 // ----------------------------------------------------
 const revealEls = document.querySelectorAll('[data-reveal]');
 const revealObserver = new IntersectionObserver((entries) => {
@@ -185,4 +185,54 @@ document.getElementById('mapsBtn').href =
 const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)');
 if (prefersReducedMotion.matches) {
   document.body.classList.add('reduced-motion');
+}
+
+// ----------------------------------------------------
+// 9. RSVP — kirim ke Google Apps Script (Google Sheet)
+// ----------------------------------------------------
+const RSVP_ENDPOINT = 'https://script.google.com/macros/s/AKfycbzh1CEryCmISX1fxcixiNxvBQOJ3ee9InK7g1wXRr8Pfz-lElvGIrPaQpZvI9u5gqmvaA/exec';
+
+const rsvpForm = document.getElementById('rsvpForm');
+const rsvpSuccess = document.getElementById('rsvpSuccess');
+
+if (rsvpForm) {
+  const rsvpSubmitBtn = document.getElementById('rsvpSubmitBtn');
+  const rsvpLabel = rsvpSubmitBtn.querySelector('.btn-label');
+  const defaultLabel = rsvpLabel.textContent;
+
+  rsvpForm.addEventListener('submit', async (e) => {
+    e.preventDefault();
+
+    const namaValue = document.getElementById('rsvpNama').value.trim();
+    if (!namaValue) return;
+
+    rsvpSubmitBtn.disabled = true;
+    rsvpSubmitBtn.classList.add('is-loading');
+    rsvpLabel.textContent = 'Mengirim...';
+
+    const formData = new FormData(rsvpForm);
+    formData.set('nama', namaValue);
+    formData.append('tamuUndangan', guestName);
+    formData.append('waktuKirim', new Date().toISOString());
+
+    try {
+      // Google Apps Script web apps don't return CORS headers by default,
+      // so the response is opaque — a resolved fetch is our success signal.
+      await fetch(RSVP_ENDPOINT, {
+        method: 'POST',
+        mode: 'no-cors',
+        body: formData,
+      });
+
+      rsvpForm.hidden = true;
+      document.getElementById('rsvpSuccessName').textContent = namaValue;
+      rsvpSuccess.hidden = false;
+      rsvpSuccess.classList.add('visible');
+    } catch (err) {
+      rsvpSubmitBtn.disabled = false;
+      rsvpSubmitBtn.classList.remove('is-loading');
+      rsvpLabel.textContent = 'Gagal, coba lagi';
+      window.setTimeout(() => { rsvpLabel.textContent = defaultLabel; }, 2600);
+    }
+  });
 }

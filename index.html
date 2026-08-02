@@ -246,21 +246,20 @@
       </div>
 
       <div class="polaroid-grid">
-        <!-- Ganti <i class="fa-solid fa-image"></i> pada tiap .polaroid-photo dengan <img src="/galeri-1.jpg" alt="..."> -->
         <figure class="polaroid" style="--rot:-5deg" data-reveal="polaroid">
-          <div class="polaroid-photo"><img src="/galeri-1.jpg" alt="1"></i></div>
+          <div class="polaroid-photo"><img src="/galeri-1.jpg" alt="Momen 1"></div>
           <figcaption>Sejak awal langkah</figcaption>
         </figure>
         <figure class="polaroid" style="--rot:3deg" data-reveal="polaroid">
-          <div class="polaroid-photo"><img src="/galeri-2.jpg" alt="2"></i></div>
+          <div class="polaroid-photo"><img src="/galeri-2.jpg" alt="Momen 2"></div>
           <figcaption>Perjalanan kami</figcaption>
         </figure>
         <figure class="polaroid" style="--rot:-2deg" data-reveal="polaroid">
-          <div class="polaroid-photo"><img src="/galeri-3.jpg" alt="3"></i></div>
+          <div class="polaroid-photo"><img src="/galeri-3.jpg" alt="Momen 3"></div>
           <figcaption>Menuju satu janji</figcaption>
         </figure>
         <figure class="polaroid" style="--rot:5deg" data-reveal="polaroid">
-          <div class="polaroid-photo"><img src="/galeri-4.jpg" alt="4"></i></div>
+          <div class="polaroid-photo"><img src="/galeri-4.jpg" alt="Momen 4"></div>
           <figcaption>Hingga selamanya</figcaption>
         </figure>
       </div>
@@ -323,6 +322,14 @@
       <div id="rsvpSuccess" class="rsvp-success" hidden data-reveal="fade">
         <i class="fa-solid fa-circle-check"></i>
         <p>Terima kasih, <strong id="rsvpSuccessName"></strong>! RSVP Anda telah kami terima dengan penuh syukur.</p>
+      </div>
+
+      <!-- Daftar ucapan & doa yang sudah masuk — kotak scrollable agar section tidak makin panjang -->
+      <div class="rsvp-list-wrap" data-reveal="fade" style="transition-delay:.25s">
+        <p class="rsvp-list-title">Ucapan &amp; Doa dari Tamu</p>
+        <div id="rsvpList" class="rsvp-list">
+          <p class="rsvp-list-empty" id="rsvpListEmpty">Memuat ucapan&hellip;</p>
+        </div>
       </div>
     </section>
 

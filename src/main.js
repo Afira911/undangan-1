@@ -190,7 +190,7 @@ if (prefersReducedMotion.matches) {
 // ----------------------------------------------------
 // 9. RSVP — kirim ke Google Apps Script (Google Sheet) + tampilkan daftar ucapan
 // ----------------------------------------------------
-const RSVP_ENDPOINT = 'https://script.google.com/macros/s/AKfycbyHHFRjHC8fI2A_nKEB2lcXOxmfEuUXEdMQNMF-qEWqd5QvQfySamslBSf23F8FXTrW_g/exec';
+const RSVP_ENDPOINT = 'https://script.google.com/macros/s/AKfycbxQ-az-9lIDjE5KamUXWzzWjfd6X3HRkuDyT0ok_okfOST9eqS76lWXu2dtjHm2pzyrCQ/exec';
 
 const rsvpForm = document.getElementById('rsvpForm');
 const rsvpSuccess = document.getElementById('rsvpSuccess');

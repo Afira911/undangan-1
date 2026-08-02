@@ -188,12 +188,73 @@ if (prefersReducedMotion.matches) {
 }
 
 // ----------------------------------------------------
-// 9. RSVP — kirim ke Google Apps Script (Google Sheet)
+// 9. RSVP — kirim ke Google Apps Script (Google Sheet) + tampilkan daftar ucapan
 // ----------------------------------------------------
 const RSVP_ENDPOINT = 'https://script.google.com/macros/s/AKfycbyHHFRjHC8fI2A_nKEB2lcXOxmfEuUXEdMQNMF-qEWqd5QvQfySamslBSf23F8FXTrW_g/exec';
 
 const rsvpForm = document.getElementById('rsvpForm');
 const rsvpSuccess = document.getElementById('rsvpSuccess');
+const rsvpListEl = document.getElementById('rsvpList');
+
+function escapeHtml(value) {
+  const div = document.createElement('div');
+  div.textContent = value === null || value === undefined ? '' : String(value);
+  return div.innerHTML;
+}
+
+function renderRsvpItem({ nama, kehadiran, pesan }) {
+  const item = document.createElement('div');
+  item.className = 'rsvp-item';
+  item.innerHTML = `
+    <div class="rsvp-item__top">
+      <span class="rsvp-item__name">${escapeHtml(nama)}</span>
+      ${kehadiran ? `<span class="rsvp-item__status">${escapeHtml(kehadiran)}</span>` : ''}
+    </div>
+    ${pesan ? `<p class="rsvp-item__message">&ldquo;${escapeHtml(pesan)}&rdquo;</p>` : ''}
+  `;
+  return item;
+}
+
+function showRsvpListEmpty(message) {
+  if (!rsvpListEl) return;
+  rsvpListEl.innerHTML = `<p class="rsvp-list-empty">${escapeHtml(message)}</p>`;
+}
+
+function prependRsvpEntry(entry) {
+  if (!rsvpListEl) return;
+  const existingEmpty = rsvpListEl.querySelector('.rsvp-list-empty');
+  if (existingEmpty) existingEmpty.remove();
+  rsvpListEl.prepend(renderRsvpItem(entry));
+}
+
+async function loadRsvpList() {
+  if (!rsvpListEl) return;
+  try {
+    const res = await fetch(RSVP_ENDPOINT, { method: 'GET' });
+    if (!res.ok) throw new Error(`HTTP ${res.status}`);
+    const entries = await res.json();
+
+    if (!Array.isArray(entries) || entries.length === 0) {
+      showRsvpListEmpty('Jadilah yang pertama mengirim ucapan & doa 🤍');
+      return;
+    }
+
+    rsvpListEl.innerHTML = '';
+    entries
+      .filter(entry => entry && entry.nama)
+      .reverse() // tampilkan yang paling baru mengirim di paling atas
+      .forEach(entry => rsvpListEl.appendChild(renderRsvpItem(entry)));
+
+    if (!rsvpListEl.children.length) {
+      showRsvpListEmpty('Jadilah yang pertama mengirim ucapan & doa 🤍');
+    }
+  } catch (err) {
+    // Daftar ucapan bersifat pelengkap — jika endpoint doGet belum
+    // di-deploy atau sedang bermasalah, degradasi dengan tenang.
+    showRsvpListEmpty('Ucapan akan tampil di sini setelah RSVP dikirim.');
+  }
+}
+loadRsvpList();
 
 if (rsvpForm) {
   const rsvpSubmitBtn = document.getElementById('rsvpSubmitBtn');
@@ -206,6 +267,9 @@ if (rsvpForm) {
     const namaValue = document.getElementById('rsvpNama').value.trim();
     if (!namaValue) return;
 
+    const kehadiranValue = new FormData(rsvpForm).get('kehadiran') || '';
+    const pesanValue = document.getElementById('rsvpPesan').value.trim();
+
     rsvpSubmitBtn.disabled = true;
     rsvpSubmitBtn.classList.add('is-loading');
     rsvpLabel.textContent = 'Mengirim...';
@@ -216,9 +280,9 @@ if (rsvpForm) {
     // so we build the payload with URLSearchParams instead of FormData.
     const payload = new URLSearchParams();
     payload.append('nama', namaValue);
-    payload.append('kehadiran', new FormData(rsvpForm).get('kehadiran') || '');
+    payload.append('kehadiran', kehadiranValue);
     payload.append('jumlah', document.getElementById('rsvpJumlah').value);
-    payload.append('pesan', document.getElementById('rsvpPesan').value.trim());
+    payload.append('pesan', pesanValue);
     payload.append('tamuUndangan', guestName);
     payload.append('waktuKirim', new Date().toISOString());
 
@@ -237,6 +301,9 @@ if (rsvpForm) {
       document.getElementById('rsvpSuccessName').textContent = namaValue;
       rsvpSuccess.hidden = false;
       rsvpSuccess.classList.add('visible');
+
+      // Tampilkan langsung di daftar tanpa menunggu round-trip GET berikutnya
+      prependRsvpEntry({ nama: namaValue, kehadiran: kehadiranValue, pesan: pesanValue });
     } catch (err) {
       rsvpSubmitBtn.disabled = false;
       rsvpSubmitBtn.classList.remove('is-loading');
